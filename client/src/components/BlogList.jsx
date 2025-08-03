@@ -11,6 +11,7 @@ const BlogList = () => {
     const {blogs, input} = useAppContext();
 
     const filteredBlogs = ()=>{
+        if (!Array.isArray(blogs)) return [];
         if(input === ''){
             return blogs
         }

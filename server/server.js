@@ -10,7 +10,7 @@ import db from './configs/db.js';
 const app = express();
 env.config();
 
-db.connect().then(()=> console.log("Database connected"));
+// db.connect().then(()=> console.log("Database connected"));
 
 app.use(cors());   
 app.use(express.json())
@@ -20,10 +20,8 @@ app.get('/', (req, res)=> res.send("API is working"))
 app.use('/api/admin', adminRoute)
 app.use('/api/blog', blogRouter)
 
-// const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
-// app.listen(PORT, ()=>{
-//     console.log(`Server running on http://localhost:${PORT}`);
-// })
-
-export default app;
+app.listen(PORT, ()=>{
+    console.log(`Server running on http://localhost:${PORT}`);
+})
