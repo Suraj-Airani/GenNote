@@ -23,4 +23,4 @@ GenNote is a modern, full stack blog application that enables users to create an
 
 ## 🖼️ Demo
 
-**Live Demo:** https://gen-note-sigma.vercel.app
+**Live Demo:** https://gen-note-nine.vercel.app
