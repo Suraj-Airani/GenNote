@@ -20,8 +20,10 @@ app.get('/', (req, res)=> res.send("API is working"))
 app.use('/api/admin', adminRoute)
 app.use('/api/blog', blogRouter)
 
-const PORT = process.env.PORT || 3000;
+// const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, ()=>{
-    console.log(`Server running on http://localhost:${PORT}`);
-})
+// app.listen(PORT, ()=>{
+//     console.log(`Server running on http://localhost:${PORT}`);
+// })
+
+export default app;
