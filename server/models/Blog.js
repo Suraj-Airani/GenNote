@@ -28,8 +28,8 @@ export async function createBlog({
     }
 
 export async function getAllBlogs() {
-  const result = await db.query("SELECT * FROM blogs WHERE is_published = true ORDER BY created_at DESC");
-  return result.rows;
+  const result = await db.query("SELECT * FROM blogs WHERE is_published = true ORDER BY created_at DESC");  
+  return result;
 }
 
 export async function getAllBlogsAdmin() {

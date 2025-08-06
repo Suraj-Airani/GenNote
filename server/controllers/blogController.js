@@ -44,7 +44,9 @@ export const addBlog = async (req, res) =>{
 export const getBlogs = async (req, res) =>{
   try {
     const blogs = await Blog.getAllBlogs();
-    res.json({success: true, blogs});
+    console.log(blogs);
+    
+    res.json({success: true, blogs: blogs});
   } catch(error){
     res.json({success: false, message: error.message});
   }
