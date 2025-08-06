@@ -34,12 +34,12 @@ export async function getAllBlogs() {
 
 export async function getAllBlogsAdmin() {
     const result = await db.query("SELECT * FROM blogs ORDER BY created_at DESC");
-    return result.rows;
+    return result;
 }
 
 export async function getBlogById(id) {
-  const result = await db.query("SELECT * FROM blogs WHERE id = $1", [id]);
-  return result.rows[0];
+  const result = await db.query("SELECT * FROM blogs WHERE id = $1", [id]);    
+  return result[0];
 }
 
 export async function updateBlog(id, updates) {
