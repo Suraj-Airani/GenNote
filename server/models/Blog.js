@@ -38,7 +38,7 @@ export async function getAllBlogsAdmin() {
 }
 
 export async function getBlogById(id) {
-  const result = await db.query("SELECT * FROM blogs WHERE id = $1", [id]);    
+  const result = await db.query("SELECT * FROM blogs WHERE id = $1", [id]);
   return result[0];
 }
 
