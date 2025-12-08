@@ -68,6 +68,60 @@ export const getBlog = async (req, res) =>{
   }
 }
 
+export const alterBlog = async (req, res) => {
+  try {
+    const { id } = req.params;
+    let updates = req.body; 
+    let fileUrl = null; // Variable to hold the new image URL
+
+    // --- NEW CODE: Handle Image Upload ---
+    if (req.file) { 
+        const result = await imagekit.upload({
+            file: req.file.buffer, 
+            fileName: req.file.originalname, 
+        });
+        fileUrl = result.url;
+        console.log("New image uploaded sucessfully");
+    }
+
+    // Prepare the updates object
+    // If a new file was uploaded, add the image_url to the updates object
+    if (fileUrl) {
+        updates.image_url = fileUrl;
+    }
+
+    // --- Check and handle ID in body (Good Practice) ---
+    // If the client mistakenly sends 'id' in the body, remove it
+    if (updates.id) {
+        const { id: excludedId, ...validUpdates } = updates;
+        updates = validUpdates;
+    }
+    
+    console.log(`Attempting to update blog ID: ${id}`);
+    console.log("Updates received:", updates);
+
+    if (!id || isNaN(Number(id))) {
+      return res.status(400).json({ success: false, message: "Invalid or missing blog ID" });
+    }
+
+    if (!updates || Object.keys(updates).length === 0) {
+      return res.status(400).json({ success: false, message: "No update fields provided in the request body." });
+    }
+
+    const updatedBlog = await Blog.updateBlog(id, updates); 
+    
+    if (!updatedBlog) {
+      return res.status(404).json({ success: false, message: "Blog not found or cannot be edited" });
+    }
+    
+    return res.json({ success: true, message: "Blog updated successfully", updatedBlog });
+    
+  } catch (error) {
+    console.error("Error updating blog:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+}
+
 export const delBlog = async (req, res) =>{
    try {
     const { id } = req.body;

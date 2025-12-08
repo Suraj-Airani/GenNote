@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { NavLink, useParams } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import { assets, blog_data, comments_data } from '../assets/assets'
 import Moment from "moment"
@@ -65,6 +65,9 @@ const Blog = () => {
       <Navbar />
       
       <div className='text-center mt-20 text-gray-600'>
+        <NavLink to='/update'>
+          <img className='inline-block justify-end h-10 w-10' src={assets.edit} alt="edit-icon" />
+        </NavLink>
         <p className='text-primary py-4 font-medium'>Published on {Moment(data.createdAt).format('MMMM Do, YYYY')}</p>
         <h1 className='text-2x1 sm:text-5xl font-semibold max-w-2xl mx-auto text-gray-800'>{data.title}</h1>
         <h2 className='my-5 max-w-lg truncate mx-auto'>{data.subTitle}</h2>

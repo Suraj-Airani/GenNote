@@ -21,7 +21,6 @@ export async function createBlog({
         image_url,
         category,
         is_published ?? false
-        // ,created_by,
     ];
     const result = await db.query(insertQuery, values);
     // return result.rows[0];
@@ -43,38 +42,37 @@ export async function getBlogById(id) {
 }
 
 export async function updateBlog(id, updates) {
-  const {
-    title,
-    subtitle,
-    description,
-    image_url,
-    category,
-    is_published,
-  } = updates;
+  const keys = Object.keys(updates).filter(key => updates[key] !== undefined && updates[key] !== null);
+  
+  if (keys.length === 0) {
+    return null; 
+  }
+
+  const setClauses = keys.map((key, index) => {
+    return `${key} = $${index + 1}`; 
+  });
+
+  setClauses.push(`updated_at = NOW()`);
+  
+  const values = keys.map(key => updates[key]);
+  
+  const idPlaceholder = `$${values.length + 1}`;
+  values.push(id); 
 
   const updateQuery = `
     UPDATE blogs SET
-      title = $1,
-      subtitle = $2,
-      description = $3,
-      image_url = $4,
-      category = $5,
-      is_published = $6,
-      updated_at = NOW()
-      WHERE id = $7
-      RETURNING *;
-    `;
-  const values = [
-    title,
-    subtitle,
-    description,
-    image_url,
-    category,
-    is_published,
-    id,
-  ];
-  const result = await db.query(updateQuery, values);
-  return result.rows[0];
+      ${setClauses.join(',\n')} 
+    WHERE id = ${idPlaceholder}
+    RETURNING *;
+  `;
+  
+  try {
+    const result = await db.query(updateQuery, values);
+    return result?.rows?.[0] || null;
+  } catch (error) {
+    console.error("Database update error:", error);
+    throw error; 
+  }
 }
 
 export async function deleteBlog(id) {

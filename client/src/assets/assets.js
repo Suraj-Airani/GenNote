@@ -25,6 +25,7 @@ import comment_icon from './comment_icon.svg'
 import tick_icon from './tick_icon.svg'
 import star_icon from './star_icon.svg'
 import cross_icon from './cross_icon.svg'
+import edit from './editicon.png'
 import home_icon from './home_icon.svg'
 import gradientBackground from './gradientBackground.png'
 import Zinc from './Zinc.jpg'
@@ -43,7 +44,7 @@ import upload from './upload.png'
 
 
 export const assets = {
-    home,add,comment,list,logout_icon,bin,upload,Zinc,
+    home,add,comment,list,logout_icon,bin,upload,Zinc,edit,
     facebook,
     google,
     twitter,
