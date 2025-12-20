@@ -12,7 +12,13 @@ const Dashboard = () => {
     })
 
     const fetchDashboard = async ()=>{
-        setDashboardData(dashboard_data)
+        try{
+            const {data} = await axios.get('/api/admin/blogs');
+            console.log(data);
+            data.success? setDashboardData(data) : toast.error(error.message);            
+        } catch(error) {
+            toast.error(error.message);
+        }
     }
 
     useEffect(()=>{
