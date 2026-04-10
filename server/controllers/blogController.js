@@ -121,8 +121,8 @@ export const addComment = async (req, res) =>{
 
 export const getBlogComments = async (req, res) =>{
   try {
-    const { blogId } = req.params;
-    const comments = await Comment.getAllComments(blogId);
+    const { id } = req.body;
+    const comments = await Comment.getAllComments(id);
     res.json({success: true, comments});
   } catch (error) {
     res.json({success: false, message: error.message});

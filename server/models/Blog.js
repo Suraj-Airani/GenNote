@@ -23,7 +23,7 @@ export async function createBlog({
         is_published ?? false
     ];
     const result = await db.query(insertQuery, values);
-    // return result.rows[0];
+    return result[0];
     }
 
 export async function getAllBlogs() {
@@ -42,7 +42,7 @@ export async function getBlogById(id) {
 }
 
 export async function deleteBlog(id) {
-  const result = await db.query("DELETE FROM blogs WHERE id = $1", [id]);
-  return result.rowCount > 0;
+  const result = await db.query("DELETE FROM blogs WHERE id = $1 RETURNING *", [id]);
+  return result.length > 0;
 }
 

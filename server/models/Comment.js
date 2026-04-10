@@ -18,13 +18,14 @@ export async function createComment({
             is_approved ?? false
         ];
         const result = await db.query(insertQuery, values);
+        return result[0];
     }
 
 export async function getAllComments(id) {
     const result = await db.query("SELECT * FROM comments WHERE blog_id = $1 AND is_approved = true ORDER BY created_at DESC", [id]);
-  return result.rows[0];
+  return result;
 }
 export async function getAllCommentsAdmin() {
     const result = await db.query("SELECT * FROM comments ORDER BY created_at DESC");
-  return result.rows;
+  return result;
 }
