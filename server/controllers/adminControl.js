@@ -37,21 +37,20 @@ export const getCommentsAdmin = async (req, res) => {
 
 export const getDashboard = async (req, res) => {
   try {
-    const recentBlogsRes = await db.query(
+    const recentBlogs = await db.query(
       'SELECT * FROM blogs ORDER BY created_at DESC LIMIT 5'
     );
-    const recentBlogs = recentBlogsRes.rows;
 
     const blogsCountRes = await db.query('SELECT COUNT(*) FROM blogs');
-    const blogs = parseInt(blogsCountRes.rows[0].count, 10);
+    const blogs = parseInt(blogsCountRes[0].count, 10);
 
     const commentsCountRes = await db.query('SELECT COUNT(*) FROM comments');
-    const comments = parseInt(commentsCountRes.rows[0].count, 10);
+    const comments = parseInt(commentsCountRes[0].count, 10);
 
     const draftsCountRes = await db.query(
       'SELECT COUNT(*) FROM blogs WHERE is_published = false'
     );
-    const drafts = parseInt(draftsCountRes.rows[0].count, 10);
+    const drafts = parseInt(draftsCountRes[0].count, 10);
 
     const dashboardData = {
       blogs,
@@ -72,7 +71,7 @@ export const deleteCommentById = async (req, res) => {
 
     const result = await db.query('DELETE FROM comments WHERE id = $1 RETURNING *', [id]);
 
-    if (result.rowCount === 0) {
+    if (result.length === 0) {
       return res.json({ success: false, message: "No comment found with this id" });
     }
 
@@ -91,7 +90,7 @@ export const approveCommentById = async (req, res) => {
       [id]
     );
 
-    if (result.rowCount === 0) {
+    if (result.length === 0) {
       return res.json({ success: false, message: "No comment found with this id" });
     }
 

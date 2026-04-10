@@ -26,6 +26,6 @@ export async function getAllComments(id) {
   return result;
 }
 export async function getAllCommentsAdmin() {
-    const result = await db.query("SELECT * FROM comments ORDER BY created_at DESC");
+    const result = await db.query("SELECT comments.*, blogs.title AS blog_title FROM comments LEFT JOIN blogs ON comments.blog_id = blogs.id ORDER BY comments.created_at DESC");
   return result;
 }
