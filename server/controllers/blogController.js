@@ -6,20 +6,20 @@ import db from "../configs/db.js";
 
 //Blog Section features
 
-export const addBlog = async (req, res) =>{
+export const addBlog = async (req, res) => {
   try {
     let fileUrl = null;
-    if(req.file){ 
+    if (req.file) {
       const result = await imagekit.upload({
-       file: req.file.buffer, // file buffer from multer
-       fileName: req.file.originalname, // original upload name
+        file: req.file.buffer, // file buffer from multer
+        fileName: req.file.originalname, // original upload name
       });
       fileUrl = result.url;
       console.log("Image uploaded sucessfully");
     }
 
     // console.log("req.body", req.body);
-    const {title, subtitle, description, category, is_published} = JSON.parse(req.body.blog);
+    const { title, subtitle, description, category, is_published } = JSON.parse(req.body.blog);
 
     // console.log("req.body",req.body);
 
@@ -34,60 +34,60 @@ export const addBlog = async (req, res) =>{
 
     console.log("Blog added to database successfully");
 
-    res.json({ success: true, message: "Blog added successfully", image_url: fileUrl});
+    res.json({ success: true, message: "Blog added successfully", image_url: fileUrl });
 
   } catch (error) {
     res.json({ success: false, message: error.message });
   }
 }
 
-export const getBlogs = async (req, res) =>{
+export const getBlogs = async (req, res) => {
   try {
-    const blogs = await Blog.getAllBlogs();    
-    res.json({success: true, blogs: blogs});
-  } catch(error){
-    res.json({success: false, message: error.message});
+    const blogs = await Blog.getAllBlogs();
+    res.json({ success: true, blogs: blogs });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
   }
 }
 
-export const getBlog = async (req, res) =>{
+export const getBlog = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(id);
-    
+    // console.log(id);
+
     if (!id || isNaN(Number(id))) {
       return res.status(400).json({ success: false, message: "Invalid or missing id" });
     }
     const blog = await Blog.getBlogById(id);
-    if(!blog){
-      return res.json({success: false, message: "Blog not found"});
-    }
-    return res.json({success: true, blog});
-  } catch (error) {
-    res.json({success: false, message: error.message});
-  }
-}
-
-export const delBlog = async (req, res) =>{
-   try {
-    const { id } = req.body;
-    await Blog.deleteBlog(id);
-    await db.query('DELETE FROM comments WHERE blog_id = $1', [id]);
-    return res.json({success: true, message: "Blog deleted successfully"});
-   } catch (error) {
-    res.json({success: false, message: error.message});
-   }
-}
-
-export const togglePublish = async (req, res) =>{
-  try {
-    const { id } = req.body;
-    const blog = await Blog.getBlogById(id);
-    
     if (!blog) {
       return res.json({ success: false, message: "Blog not found" });
     }
-    
+    return res.json({ success: true, blog });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+}
+
+export const delBlog = async (req, res) => {
+  try {
+    const { id } = req.body;
+    await Blog.deleteBlog(id);
+    await db.query('DELETE FROM comments WHERE blog_id = $1', [id]);
+    return res.json({ success: true, message: "Blog deleted successfully" });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+}
+
+export const togglePublish = async (req, res) => {
+  try {
+    const { id } = req.body;
+    const blog = await Blog.getBlogById(id);
+
+    if (!blog) {
+      return res.json({ success: false, message: "Blog not found" });
+    }
+
     const newStatus = !blog.is_published;
 
     const updatedBlog = await Blog.updateBlog(id, { ...blog, is_published: newStatus });
@@ -98,46 +98,46 @@ export const togglePublish = async (req, res) =>{
       blog: updatedBlog,
     });
   } catch (error) {
-    res.json({success: false, message: error.message});
+    res.json({ success: false, message: error.message });
   }
 }
 
 // Comment section
 
-export const addComment = async (req, res) =>{
+export const addComment = async (req, res) => {
   try {
-    const {blog_id, name, content } = req.body;
-    
-    const newComment = await Comment.createComment({blog_id, name, content});
+    const { blog_id, name, content } = req.body;
+
+    const newComment = await Comment.createComment({ blog_id, name, content });
 
     console.log("Comment added successfully");
 
-    res.json({ success: true, message: "Comment added for review"});
-    
+    res.json({ success: true, message: "Comment added for review" });
+
   } catch (error) {
-    res.json({success: false, message: error.message});
+    res.json({ success: false, message: error.message });
   }
 }
 
-export const getBlogComments = async (req, res) =>{
+export const getBlogComments = async (req, res) => {
   try {
     const { id } = req.body;
     const comments = await Comment.getAllComments(id);
-    res.json({success: true, comments});
+    res.json({ success: true, comments });
   } catch (error) {
-    res.json({success: false, message: error.message});
+    res.json({ success: false, message: error.message });
   }
 }
 
-export const generateContent = async (req, res)=>{
+export const generateContent = async (req, res) => {
   try {
-    const {prompt} = req.body;
+    const { prompt } = req.body;
     console.log(prompt);
-    
+
     const content = await main(prompt + ' Generate a blog content for this topic in simple text format')
-    res.json({success: true, content})
+    res.json({ success: true, content })
   } catch (error) {
-    res.json({success: false, message: error.message})
+    res.json({ success: false, message: error.message })
   }
 }
 /*
