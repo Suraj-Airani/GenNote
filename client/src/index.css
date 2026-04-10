@@ -38,3 +38,10 @@
 .rich-text li { margin-bottom: 8px; }
 
 .rich-text a { color: #007AFF }
+
+.gradient-bg {
+  width: 100vw;
+  height: 600px;
+  background: radial-gradient(closest-side, rgba(80, 68, 228, 0.4), transparent);
+  filter: blur(20px);
+}

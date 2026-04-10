@@ -1,5 +1,5 @@
 import React from 'react'
-import { assets } from '../assets/assets'
+
 import { useAppContext } from '../context/AppContext';
 import { useRef } from 'react';
 
@@ -41,8 +41,7 @@ const Header = () => {
             input && <button onClick={onClear} className='border font-light text-xs py-1 px-3 rounded-sm shadow-custom-sm cursor-pointer'>Clear Search</button>
           }
         </div>
-        <img src={assets.gradientBackground} alt="" className='absolute -top-50 
-        -z-1 opacity-50'/>
+        <div className='absolute -top-50 left-1/2 -translate-x-1/2 -z-1 opacity-50 gradient-bg'></div>
     </div>
   )
 }
